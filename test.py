@@ -1,6 +1,6 @@
 import gdata.spreadsheet.service
 import gdata.service
-#import getpass
+import getpass
 import string
 
 
@@ -69,16 +69,37 @@ def ship_pack(name):
     wksht_id = get_worksheet_id(client, 0)
     query = gdata.spreadsheet.service.CellQuery()
     query.min_col = '2'
-    query.max_col = '11'
+    query.max_col = '2'
     query.min_row = '2'
     cell_feed = client.GetCellsFeed(spreadsheet_key, wksht_id, query=query)
-    included_cells = list()
-    count = 0
+    cell_rows = set()
     for entry in cell_feed.entry:
-        if count == 9:
-            break
-        print '%d : %s' % (count, entry.content.text)
+        if entry.content.text == name:
+            cell_rows.add(int(entry.cell.row))
+    query.min_row = str(min(cell_rows))
+    query.max_row = str(max(cell_rows))
+    query.min_col = '1'
+    query.max_col = '10'
+    cell_feed = client.GetCellsFeed(spreadsheet_key, wksht_id, query=query)
+    count = 1
+    cards = list()
+    cur_card = dict()
+    bad_words = list()
+    for entry in cell_feed.entry:
+        if count % 10 == 0:
+            cur_card['badwords'] = ",".join(bad_words)
+            if entry.content.text == 'Final' or entry.content.text == 'Shipped':
+                cards.append(cur_card)
+            cur_card = dict()
+            bad_words = list()
+        elif count % 10 == 1:
+            cur_card['_id'] = entry.content.text
+        elif count % 10 == 3:
+            cur_card['title'] = entry.content.text
+        elif count % 10 >= 4 and count % 10 <= 8:
+            bad_words.append(entry.content.text)
         count += 1
+    print(cards)
 
 
 def ship_pack_ui():
@@ -89,7 +110,8 @@ def ship_pack_ui():
         print('  %s: %s' % (index, pack))
     ship_index = raw_input('Which pack would you like to ship? ')
     ship_name = pack_dictionary[ship_index]
-    ship_pack(ship_name)
+    return ship_pack(ship_name)
+
 
 def main():
     client = gdata.spreadsheet.service.SpreadsheetsService()
