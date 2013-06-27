@@ -1,34 +1,77 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+###############################################################################
+#
+# Library:   buzzbackend
+#
+# Copyright 2013 Siramix Labs
+#
+# All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 ( the "License" );
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+###############################################################################
 import gdata.spreadsheet.service
 import gdata.service
 import getpass
-import string
+import ConfigParser
+import os.path
 
 
-def _PrintFeed(feed):
-    for i, entry in enumerate(feed.entry):
-        if isinstance(feed, gdata.spreadsheet.SpreadsheetsCellsFeed):
-            print i
-            print entry
-            print '%s %s\n' % (entry.title.text, entry.content.text)
-        elif isinstance(feed, gdata.spreadsheet.SpreadsheetsListFeed):
-            print '%s %s %s' % (i, entry.title.text, entry.content.text)
-            # Print this row's value for each column (the custom dictionary is
-            # built using the gsx: elements in the entry.)
-            print 'Contents:'
-            for key in entry.custom:
-                print '  %s: %s' % (key, entry.custom[key].text)
-            print '\n',
+class WordDatabase(object):
+    """Class for connecting to the word database."""
+
+    def __init__(self):
+        super(WordDatabase, self).__init__()
+        self.spreadsheet_key = '0Ar6_A4FPzJBPdFlZTEN5REJJYVMtejI1RGkwYW1FX2c'
+        home_dir = os.path.expanduser('~')
+        self.config_path = os.path.join(home_dir, '.buzzbackconfig')
+        self.config = ConfigParser.ConfigParser()
+        self.config.read(self.config_path)
+        if not self.config.has_section('Credentials'):
+            self.config.add_section('Credentials')
+
+    def login_to_spreadsheet(self):
+
+        if self.config.has_option('Credentials', 'email'):
+            email = self.config.get('Credentials', 'email')
         else:
-            print '%s %s\n' % (i, entry.title.text)
+            email = raw_input('Email: ')
+        self.config.set('Credentials', 'email', email)
+
+        client = gdata.spreadsheet.service.SpreadsheetsService()
+
+        if self.config.has_option('Credentials', 'password'):
+            password = self.config.get('Credentials', 'password')
+        else:
+            password = getpass.getpass('Password: ')
+        self.config.set('Credentials', 'password', password)
+
+        client.ClientLogin(email, password)
+
+        with open(self.config_path, 'w') as config_file:
+            self.config.write(config_file)
+
+        return client
 
 
 def login_to_spreadsheet():
     client = gdata.spreadsheet.service.SpreadsheetsService()
-    #client.email = raw_input('Email: ')
-    #client.password = getpass.getpass('Password: ')
-    client.email = 'cpreynolds@gmail.com'
-    client.source = "BuzzBackend"
-    client.ProgrammaticLogin()
+    email = raw_input('Email: ')
+    #password = getpass.getpass('Password: ')
+
+    client.ClientLogin(email, password)
     return client
 
 
@@ -120,27 +163,8 @@ def ship_pack_ui():
     return ship_pack(ship_name)
 
 
-def main():
-    client = gdata.spreadsheet.service.SpreadsheetsService()
-    client.email = raw_input('Email: ')
-    client.password = getpass.getpass('Password: ')
-    client.source = "BuzzBackend"
-    client.ProgrammaticLogin()
-    spreadsheet_key = '0Ar6_A4FPzJBPdFlZTEN5REJJYVMtejI1RGkwYW1FX2c'
-    ws_feed = client.GetWorksheetsFeed(spreadsheet_key)
-    wksht_id_parts = ws_feed.entry[string.atoi('0')].id.text.split('/')
-    wksht_id = wksht_id_parts[len(wksht_id_parts) - 1]
-    _PrintFeed(ws_feed)
-    #list_feed = client.GetListFeed(spreadsheet_key, wksht_id)
-    #_PrintFeed(list_feed)
-    #print(len(list_feed.entry))
-    query = gdata.spreadsheet.service.CellQuery()
-    query.min_col = '2'
-    query.max_col = '2'
-    cell_feed = client.GetCellsFeed(spreadsheet_key, wksht_id, query=query)
-    for i, entry in enumerate(cell_feed.entry):
-        print '%s %s\n' % (entry.title.text, entry.content.text)
-
 if __name__ == '__main__':
-    print determine_start_id()
-    print ship_pack_ui()
+    #print determine_start_id()
+    #print ship_pack_ui()
+    x = WordDatabase()
+    x.login_to_spreadsheet()
