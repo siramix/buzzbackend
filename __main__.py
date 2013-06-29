@@ -76,7 +76,7 @@ def ship_pack_ui(database):
         print('  %s: %s' % (index, pack))
     ship_index = raw_input('Which pack would you like to ship? ')
     ship_name = pack_dictionary[ship_index]
-    return database.ship_pack(ship_name)
+    return database.get_pack(ship_name)
 
 
 def login_to_database():

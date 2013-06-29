@@ -87,7 +87,7 @@ class WordDatabase(object):
 
         return start_id
 
-    def ship_pack(self, name):
+    def get_pack(self, name):
         """Output the designated pack."""
         wksht_id = self.get_worksheet_id(0)
         query = gdata.spreadsheet.service.CellQuery()
