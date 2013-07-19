@@ -2,7 +2,7 @@
 
 This is intended to be a supporting application for curating and deploying
 "packs" of cards for Buzzwords. Currently, the application is run using the
-following command (with buzzbacked somewhere that python can find it):
+following command (with buzzbackend somewhere that python can find it):
 
     $ python -m buzzbackend
 
@@ -13,3 +13,9 @@ loaded from there if such a file is present. The file takes the form:
     [Credentials]
     email = email@email.com
     password = secret
+
+When deploying packs to AWS, you need to make sure that you set up the
+necessary access keys as such:
+
+    export AWS_ACCESS_KEY_ID=<key>
+    export AWS_SECRET_ACCESS_KEY=<key>
