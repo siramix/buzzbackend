@@ -14,6 +14,9 @@ loaded from there if such a file is present. The file takes the form:
     email = email@email.com
     password = secret
 
+Note that if you use Google's 2 Step Verification you will need to generate an
+application specific password and use that.
+
 When deploying packs to AWS, you need to make sure that you set up the
 necessary access keys as such:
 
