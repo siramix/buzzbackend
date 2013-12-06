@@ -24,7 +24,7 @@
 ###############################################################################
 import gdata.spreadsheet.service
 import gdata.service
-
+import json
 
 class WordDatabase(object):
     """Class for connecting to the word database."""
@@ -87,6 +87,24 @@ class WordDatabase(object):
 
         return start_id
 
+    def format_cardstring(self, cards):
+        """Format the list of cards into a string ready for app consumption"""
+        cardString = ''
+        # Add new lines between each, instead of commas
+        for card in cards:
+            cardString += str(card) + '\n'
+        cardString.rstrip()
+        # Replace ' with " if it's one of the keys
+        cardString = cardString.replace("{'", '{"')
+        cardString = cardString.replace("'}", '"}')
+        cardString = cardString.replace("': ", '": ')
+        cardString = cardString.replace(": '", ': "')
+        cardString = cardString.replace("', ", '", ')
+        cardString = cardString.replace(", '", ', "')
+        # Replace #s for TMs
+        cardString = cardString.replace('#', '™')
+        return cardString
+
     def get_pack(self, name):
         """Output the designated pack."""
         wksht_id = self.get_worksheet_id(0)
@@ -114,7 +132,7 @@ class WordDatabase(object):
         bad_words = list()
         for entry in cell_feed.entry:
             if count % 10 == 0:
-                cur_card['badwords'] = ",".join(bad_words)
+                cur_card['badwords'] = ",".join(bad_words).upper()
                 if entry.content.text == 'Final' or entry.content.text == 'Shipped':
                     cards.append(cur_card)
                 else:
@@ -122,14 +140,11 @@ class WordDatabase(object):
                 cur_card = dict()
                 bad_words = list()
             elif count % 10 == 1:
-                cur_card['_id'] = entry.content.text
+                cur_card['_id'] = entry.content.text.strip()
             elif count % 10 == 3:
-                cur_card['title'] = entry.content.text
+                cur_card['title'] = entry.content.text.strip().title()
             elif count % 10 >= 4 and count % 10 <= 8:
-                bad_words.append(entry.content.text)
+                bad_words.append(entry.content.text.strip())
             count += 1
-        cardString = ''
-        for card in cards:
-            cardString += str(card) + '\n'
-        cardString.rstrip()
-        return cardString
+        formatted_cards = self.format_cardstring(cards)
+        return formatted_cards

@@ -23,9 +23,43 @@ necessary access keys as such:
     export AWS_ACCESS_KEY_ID=<key>
     export AWS_SECRET_ACCESS_KEY=<key>
 
-# Deployment Instructions
+# Pack Deployment Instructions
 
 This script should be used for all pack deployments: updates and new packs.
 
-1. First open aws.py and modify the PACKDATA_DIR to the production directoy.
-2. Run python buzzbackend/ and follow in-app instructions.
+# Word Review Checklist
+
+1. Look over the word database and verify the following.
+    1. Run spellcheck!
+    1. All IDs for words are unique
+    1. Pack title is appropriate for display
+
+## New Pack Process
+
+First test this deployment process without step 1!
+
+1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
+1. Modify the aws.upload_pack function to the correct meta data for the new pack.
+
+        {"_id": 100-150 for standard purchasable packs,
+        "name": name,
+        "path": "packs/" + filename + ".json",
+        "icon_path": "packs/icons/packicon_classic1.png",
+        "description": <VIEWABLE DESCRIPTION OF PACK>,
+        "size": <NUMBER OF CARDS>,
+        "purchase_type": <ALL PURCHASABLE PACKS ARE 1>,
+        "version": 1,
+        "price": "BUY"}
+
+1. Run python buzzbackend/ and follow in-app instructions.
+
+## Pack Update Process
+
+First test this deployment process without step 1!
+
+1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
+1. Run python buzzbackend/ and follow in-app instructions.
+
+At this point, new installs will get the pack, but existing installs won't.
+To push this to existing installs, manually tick up the version number in
+packs.json so they'll be recognized as needing an update.
