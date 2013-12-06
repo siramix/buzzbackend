@@ -128,4 +128,8 @@ class WordDatabase(object):
             elif count % 10 >= 4 and count % 10 <= 8:
                 bad_words.append(entry.content.text)
             count += 1
-        return cards
+        cardString = ''
+        for card in cards:
+            cardString += str(card) + '\n'
+        cardString.rstrip()
+        return cardString

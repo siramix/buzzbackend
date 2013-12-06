@@ -22,3 +22,10 @@ necessary access keys as such:
 
     export AWS_ACCESS_KEY_ID=<key>
     export AWS_SECRET_ACCESS_KEY=<key>
+
+# Deployment Instructions
+
+This script should be used for all pack deployments: updates and new packs.
+
+1. First open aws.py and modify the PACKDATA_DIR to the production directoy.
+2. Run python buzzbackend/ and follow in-app instructions.

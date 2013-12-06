@@ -27,6 +27,7 @@ import ConfigParser
 import os.path
 import getpass
 import db
+import aws
 
 
 def get_config():
@@ -74,9 +75,13 @@ def ship_pack_ui(database):
     print('Which pack would you like to ship?')
     for index, pack in packs:
         print('  %s: %s' % (index, pack))
-    ship_index = raw_input('Which pack would you like to ship? ')
+    ship_index = raw_input('Which pack would you like to ship?\n')
     ship_name = pack_dictionary[ship_index]
-    return database.get_pack(ship_name)
+    print ('\nPlease review the card data printed below...\n')
+    card_data = database.get_pack(ship_name)
+    print (card_data)
+    filename = raw_input('What is the filename for this pack (ex. buzzwords_i)?\n')
+    aws.upload_pack(ship_name, filename, card_data)
 
 
 def login_to_database():
@@ -98,7 +103,8 @@ def login_to_database():
 
 def main():
     database = login_to_database()
-    print(ship_pack_ui(database))
+    ship_pack_ui(database)
+    print('\nPack data has been shipped. Review it in AWS.')
 
 
 if __name__ == '__main__':
