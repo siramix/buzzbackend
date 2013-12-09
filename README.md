@@ -52,6 +52,11 @@ First test this deployment process without step 1!
         "price": "BUY"}
 
 1. Run python buzzbackend/ and follow in-app instructions.
+1. Verify that the shipped pack words in the spreadsheet are marked as shipped.
+
+    *FREE PACKS:* Even free packs should probably be purchase_type 1. This is because
+    Amazon lets you do free entitled content. Players will have it tied to their
+    account so we can charge later if we want.
 
 ## Pack Update Process
 
@@ -59,7 +64,7 @@ First test this deployment process without step 1!
 
 1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
 1. Run python buzzbackend/ and follow in-app instructions.
-
-At this point, new installs will get the pack, but existing installs won't.
+1. Verify that the shipped pack words in the spreadsheet are marked as shipped.
+1. At this point, new installs will get the pack, but existing installs won't.
 To push this to existing installs, manually tick up the version number in
 packs.json so they'll be recognized as needing an update.
