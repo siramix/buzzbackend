@@ -24,7 +24,6 @@
 ###############################################################################
 import gdata.spreadsheet.service
 import gdata.service
-import json
 
 class WordDatabase(object):
     """Class for connecting to the word database."""
@@ -106,7 +105,11 @@ class WordDatabase(object):
         return cardString
 
     def get_pack(self, name):
-        """Output the designated pack."""
+        """
+        Retrieve from Google Spreadsheet all the words for a given
+        pack (by name) and format them into a string of JSON-ish pack
+        data ready to be uploaded to our servers.
+        """
         wksht_id = self.get_worksheet_id(0)
         query = gdata.spreadsheet.service.CellQuery()
         query.min_col = '2'
@@ -115,6 +118,7 @@ class WordDatabase(object):
         cell_feed = self.client.GetCellsFeed(self.spreadsheet_key,
                                              wksht_id,
                                              query=query)
+        # Find rows that belong to the provided pack
         cell_rows = set()
         for entry in cell_feed.entry:
             if entry.content.text == name:
@@ -126,12 +130,18 @@ class WordDatabase(object):
         cell_feed = self.client.GetCellsFeed(self.spreadsheet_key,
                                              wksht_id,
                                              query=query)
-        count = 1
+        # Parse the retrieved cell data into json-ish pack data
         cards = list()
         cur_card = dict()
         bad_words = list()
         for entry in cell_feed.entry:
-            if count % 10 == 0:
+            cur_row = int(entry.cell.row)
+            cur_col = int(entry.cell.col)
+            # Skip a row that doesn't match our expected Pack Name
+            if cur_row not in cell_rows:
+                continue
+            # Parse good rows and create a dict object out of each
+            if cur_col == 10:
                 cur_card['badwords'] = ",".join(bad_words).upper()
                 if entry.content.text == 'Final' or entry.content.text == 'Shipped':
                     cards.append(cur_card)
@@ -139,12 +149,11 @@ class WordDatabase(object):
                     print('Warning: "{0}" is not ready'.format(cur_card['title']))
                 cur_card = dict()
                 bad_words = list()
-            elif count % 10 == 1:
+            elif cur_col == 1:
                 cur_card['_id'] = entry.content.text.strip()
-            elif count % 10 == 3:
+            elif cur_col == 3:
                 cur_card['title'] = entry.content.text.strip().title()
-            elif count % 10 >= 4 and count % 10 <= 8:
+            elif cur_col >= 4 and cur_col <= 8:
                 bad_words.append(entry.content.text.strip())
-            count += 1
         formatted_cards = self.format_cardstring(cards)
         return formatted_cards
