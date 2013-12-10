@@ -38,6 +38,7 @@ This script should be used for all pack deployments: updates and new packs.
 
 First test this deployment process without step 1!
 
+1. Make sure the icon is uploaded to Amazon S3 in packs/icons/ directory.
 1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
 1. Modify the aws.upload_pack function to the correct meta data for the new pack.
 
@@ -49,7 +50,7 @@ First test this deployment process without step 1!
         "size": <NUMBER OF CARDS>,
         "purchase_type": <ALL PURCHASABLE PACKS ARE 1>,
         "version": 1,
-        "price": "BUY"}
+        "action_string": "BUY"}
 
 1. Run python buzzbackend/ and follow in-app instructions.
 1. Verify that the shipped pack words in the spreadsheet are marked as shipped.
@@ -57,6 +58,10 @@ First test this deployment process without step 1!
     *FREE PACKS:* Even free packs should probably be purchase_type 1. This is because
     Amazon lets you do free entitled content. Players will have it tied to their
     account so we can charge later if we want.
+
+1. Go to Amazon Mobile Developers console and add the IAP item, with correct
+path for pack icon along with other meta data.
+
 
 ## Pack Update Process
 
