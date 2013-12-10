@@ -38,7 +38,9 @@ This script should be used for all pack deployments: updates and new packs.
 
 First test this deployment process without step 1!
 
-1. Make sure the icon is uploaded to Amazon S3 in packs/icons/ directory.
+1. Follow the Word Review Checklist
+1. Make sure the icon is uploaded to Amazon S3 in packs/icons/ directory
+and correctly permissioned.
 1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
 1. Modify the aws.upload_pack function to the correct meta data for the new pack.
 
@@ -67,6 +69,7 @@ path for pack icon along with other meta data.
 
 First test this deployment process without step 1!
 
+1. Follow the Word Review Checklist
 1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
 1. Run python buzzbackend/ and follow in-app instructions.
 1. Verify that the shipped pack words in the spreadsheet are marked as shipped.
