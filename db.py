@@ -150,6 +150,8 @@ class WordDatabase(object):
                 cur_card = dict()
                 bad_words = list()
             elif cur_col == 1:
+                if entry.content.text == '-1':
+                    print('Warning: row: "{0}" has an unset ID!'.format(cur_row))
                 cur_card['_id'] = entry.content.text.strip()
             elif cur_col == 3:
                 cur_card['title'] = entry.content.text.strip().title()
