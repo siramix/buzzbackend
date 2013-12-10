@@ -64,7 +64,7 @@ def upload_pack(name, filename, contents):
             "other meta data is updated if making an update."
     if not pack_found:
         print "Pack does not exist. Adding new pack to packs.json."
-        new_pack = {"_id": 101,
+        new_pack = {"_id": 100,
                     "name": name,
                     "path": "packs/" + filename + ".json",
                     "icon_path": "packs/icons/packicon_classic1.png",
