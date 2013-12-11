@@ -44,7 +44,7 @@ and correctly permissioned.
 1. Open aws.py and modify the PACKDATA_DIR to the production directoy.
 1. Modify the aws.upload_pack function to the correct meta data for the new pack.
 
-        {"_id": 100-150 for standard purchasable packs,
+        {"_id": 100-149 for standard purchasable packs,
         "name": name,
         "path": "packs/" + filename + ".json",
         "icon_path": "packs/icons/packicon_classic1.png",
