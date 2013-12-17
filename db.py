@@ -154,7 +154,7 @@ class WordDatabase(object):
                     print('Warning: row: "{0}" has an unset ID!'.format(cur_row))
                 cur_card['_id'] = entry.content.text.strip()
             elif cur_col == 3:
-                cur_card['title'] = entry.content.text.strip().title()
+                cur_card['title'] = entry.content.text.strip()
             elif cur_col >= 4 and cur_col <= 8:
                 bad_words.append(entry.content.text.strip())
         formatted_cards = self.format_cardstring(cards)
