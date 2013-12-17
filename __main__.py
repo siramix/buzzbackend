@@ -86,7 +86,7 @@ def ship_pack_ui(database):
 
 def login_to_database():
     """Login to the database and return the db object."""
-    spreadsheet_key = '0Ar6_A4FPzJBPdFlZTEN5REJJYVMtejI1RGkwYW1FX2c'
+    spreadsheet_key = '0AlafstGFd0zJdFNxMGdseWdCVHNDWGpCY2NZeTktQXc'
 
     # Login. Loop until it works.
     email, password = get_credentials()

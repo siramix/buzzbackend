@@ -57,7 +57,8 @@ def upload_pack(name, filename, contents):
     pack_found = False
 
     for line in packs_contents.split('\n'):
-        cur_pack = json.loads(line)
+        if (line.strip() != ''):
+            cur_pack = json.loads(line)
         if cur_pack['path'] == 'packs/%s.json' % filename:
             pack_found = True
             print "Pack already exists. Make sure version and " \
