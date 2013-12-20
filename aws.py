@@ -66,12 +66,12 @@ def upload_pack(name, filename, contents):
     if not pack_found:
         print "Pack does not exist. Adding new pack to packs.json."
         # EDIT THIS SECTION HERE FOR EACH NEW PACK!
-        new_pack = {"_id": 100,
+        new_pack = {"_id": 150,
                     "name": name,
                     "path": "packs/" + filename + ".json",
-                    "icon_path": "packs/icons/packicon_extra1.png",
-                    "description": "A pack of extra buzzwords for anyone who wants to beef up their original buzzwords deck.",
-                    "size": 250,
+                    "icon_path": "packs/icons/packicon_christmas.png",
+                    "description": "A wintry mix of words that your friends and family can enjoy during the holidays.",
+                    "size": 150,
                     "purchase_type": 1,
                     "version": 1,
                     "action_string": "BUY"}
